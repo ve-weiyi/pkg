@@ -52,7 +52,7 @@ func Test_Fanout_Publish(t *testing.T) {
 
 	for i := 0; i <= 100; i++ {
 		fmt.Println(i)
-		err = mq1.PublishMessage(nil, []byte("user email: "+strconv.Itoa(i)))
+		err = mq1.Publish(nil, []byte("user email: "+strconv.Itoa(i)))
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -95,7 +95,7 @@ func Test_Fanout_Subscribe1(t *testing.T) {
 		rabbitmqx.WithConsumerAutoAck(true),
 	)
 
-	mq.SubscribeMessage(func(ctx context.Context, msg []byte) error {
+	mq.Subscribe(func(ctx context.Context, msg []byte) error {
 		log.Printf("receive message: %s", string(msg))
 		return nil
 	})
@@ -141,7 +141,7 @@ func Test_Fanout_Subscribe2(t *testing.T) {
 		rabbitmqx.WithConsumerAutoAck(true),
 	)
 
-	mq.SubscribeMessage(func(ctx context.Context, msg []byte) error {
+	mq.Subscribe(func(ctx context.Context, msg []byte) error {
 		log.Printf("receive message: %s", string(msg))
 		return nil
 	})
@@ -187,7 +187,7 @@ func Test_Fanout_Subscribe3(t *testing.T) {
 		rabbitmqx.WithConsumerAutoAck(true),
 	)
 
-	mq.SubscribeMessage(func(ctx context.Context, msg []byte) error {
+	mq.Subscribe(func(ctx context.Context, msg []byte) error {
 		log.Printf("receive message: %s", string(msg))
 		return nil
 	})

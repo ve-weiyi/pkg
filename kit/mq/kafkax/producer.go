@@ -17,7 +17,7 @@ type KafkaProducer struct {
 }
 
 func NewKafkaProducer(c *KafkaConf) *KafkaProducer {
-	mechanism, err := scram.Mechanism(scram.SHA512, "username", "password")
+	mechanism, err := scram.Mechanism(scram.SHA512, c.Username, c.Password)
 	if err != nil {
 		panic(err)
 	}
@@ -39,7 +39,7 @@ func NewKafkaProducer(c *KafkaConf) *KafkaProducer {
 	}
 }
 
-func (mq *KafkaProducer) PublishMessage(ctx context.Context, msg []byte) error {
+func (mq *KafkaProducer) Publish(ctx context.Context, msg []byte) error {
 	message := kafka.Message{
 		Value: msg,
 	}

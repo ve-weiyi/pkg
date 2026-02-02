@@ -46,7 +46,7 @@ func NewKafkaConsumer(c *KafkaConf) *KafkaConsumer {
 	}
 }
 
-func (ms *KafkaConsumer) SubscribeMessage(handler func(ctx context.Context, msg []byte) error) {
+func (ms *KafkaConsumer) Subscribe(handler func(ctx context.Context, msg []byte) error) {
 	ms.Info("KafkaConsumer [*] Waiting for messages. To exit press CTRL+C")
 	for {
 		func() {

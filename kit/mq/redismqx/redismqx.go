@@ -32,7 +32,7 @@ func NewRedisMqConn(redisAddr, channel string) *RedisMqConn {
 }
 
 // PublishMessage 发布消息
-func (r *RedisMqConn) PublishMessage(ctx context.Context, msg []byte) error {
+func (r *RedisMqConn) Publish(ctx context.Context, msg []byte) error {
 	err := r.client.Publish(ctx, r.channel, msg).Err()
 	if err != nil {
 		r.Errorf("[发布失败] %v", err)
@@ -43,7 +43,7 @@ func (r *RedisMqConn) PublishMessage(ctx context.Context, msg []byte) error {
 }
 
 // SubscribeMessage 订阅消息
-func (r *RedisMqConn) SubscribeMessage(handler func(ctx context.Context, msg []byte) error) {
+func (r *RedisMqConn) Subscribe(handler func(ctx context.Context, msg []byte) error) {
 	ctx := context.Background()
 	pubsub := r.client.Subscribe(ctx, r.channel)
 	defer pubsub.Close()

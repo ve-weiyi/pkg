@@ -25,7 +25,7 @@ func Test_Topic_Publish(t *testing.T) {
 
 	for i := 0; i <= 100; i++ {
 		fmt.Println(i)
-		err := mq1.PublishMessage(nil, []byte("user online: "+strconv.Itoa(i)))
+		err := mq1.Publish(nil, []byte("user online: "+strconv.Itoa(i)))
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -37,7 +37,7 @@ func Test_Topic_Subscribe1(t *testing.T) {
 
 	mq := kafkax.NewKafkaConsumer(c)
 
-	mq.SubscribeMessage(func(ctx context.Context, msg []byte) error {
+	mq.Subscribe(func(ctx context.Context, msg []byte) error {
 		log.Printf("1 receive message: %s", string(msg))
 		return nil
 	})
@@ -48,7 +48,7 @@ func Test_Topic_Subscribe1(t *testing.T) {
 func Test_Topic_Subscribe2(t *testing.T) {
 	mq := kafkax.NewKafkaConsumer(c)
 
-	mq.SubscribeMessage(func(ctx context.Context, msg []byte) error {
+	mq.Subscribe(func(ctx context.Context, msg []byte) error {
 		log.Printf("2 receive message: %s", string(msg))
 		return nil
 	})

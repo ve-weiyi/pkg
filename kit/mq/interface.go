@@ -4,12 +4,12 @@ import (
 	"context"
 )
 
-type MessagePublisher interface {
-	// 发送消息
-	PublishMessage(ctx context.Context, msg []byte) error
+type Producer interface {
+	// 发布消息
+	Publish(ctx context.Context, msg []byte) error
 }
 
-type MessageSubscriber interface {
-	// 接收消息
-	SubscribeMessage(handler func(ctx context.Context, msg []byte) error)
+type Consumer interface {
+	// 订阅消息
+	Subscribe(handler func(ctx context.Context, msg []byte) error)
 }

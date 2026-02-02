@@ -30,7 +30,7 @@ func NewRabbitmqConsumer(conn *RabbitmqConn, opts ...ConsumerOption) *RabbitmqCo
 	}
 }
 
-func (r *RabbitmqConsumer) SubscribeMessage(handler func(ctx context.Context, message []byte) error) {
+func (r *RabbitmqConsumer) Subscribe(handler func(ctx context.Context, message []byte) error) {
 	//接收消息
 	msgs, err := r.conn.Consume(r.opts)
 	if err != nil {

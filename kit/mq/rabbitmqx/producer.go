@@ -29,7 +29,7 @@ func NewRabbitmqProducer(conn *RabbitmqConn, opts ...PublisherOption) *RabbitmqP
 	}
 }
 
-func (r *RabbitmqProducer) PublishMessage(ctx context.Context, msg []byte) error {
+func (r *RabbitmqProducer) Publish(ctx context.Context, msg []byte) error {
 	err := r.conn.Publish(amqp.Publishing{
 		ContentType: "text/plain",
 		Body:        msg,
