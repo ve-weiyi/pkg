@@ -1,4 +1,4 @@
-package tokenx
+package tokenstore
 
 import (
 	"crypto/md5"
@@ -6,18 +6,18 @@ import (
 	"time"
 )
 
-// SignTokenManager 基于签名的 Token 管理器实现，支持单设备登录
-type SignTokenManager struct {
-	store             TokenStore
+// SignTokenStore 基于签名的 Token 管理器实现，支持单设备登录
+type SignTokenStore struct {
+	store             TokenCache
 	secretKey         string
 	issuer            string
 	accessExpireTime  int64
 	refreshExpireTime int64
 }
 
-// NewSignTokenManager 创建签名 Token 管理器
-func NewSignTokenManager(store TokenStore, secretKey, issuer string, accessExpire, refreshExpire int64) *SignTokenManager {
-	return &SignTokenManager{
+// NewSignTokenStore 创建签名 Token 管理器
+func NewSignTokenStore(store TokenCache, secretKey, issuer string, accessExpire, refreshExpire int64) *SignTokenStore {
+	return &SignTokenStore{
 		store:             store,
 		secretKey:         secretKey,
 		issuer:            issuer,
@@ -27,7 +27,7 @@ func NewSignTokenManager(store TokenStore, secretKey, issuer string, accessExpir
 }
 
 // GenerateToken 生成签名 Token
-func (m *SignTokenManager) GenerateToken(uid string) (*Token, error) {
+func (m *SignTokenStore) GenerateToken(uid string) (*Token, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("uid is empty")
 	}
@@ -53,7 +53,7 @@ func (m *SignTokenManager) GenerateToken(uid string) (*Token, error) {
 }
 
 // ValidateToken 验证 Token 有效性
-func (m *SignTokenManager) ValidateToken(uid, accessToken string) error {
+func (m *SignTokenStore) ValidateToken(uid, accessToken string) error {
 	storedToken, err := m.store.Get(fmt.Sprintf("%s:%s", TokenPrefixAccess, uid))
 	if err != nil {
 		return err
@@ -68,7 +68,7 @@ func (m *SignTokenManager) ValidateToken(uid, accessToken string) error {
 }
 
 // RefreshToken 刷新 Token
-func (m *SignTokenManager) RefreshToken(uid, refreshToken string) (*Token, error) {
+func (m *SignTokenStore) RefreshToken(uid, refreshToken string) (*Token, error) {
 	storedToken, err := m.store.Get(fmt.Sprintf("%s:%s", TokenPrefixRefresh, uid))
 	if err != nil || storedToken == "" {
 		return nil, ErrTokenExpired
@@ -81,7 +81,7 @@ func (m *SignTokenManager) RefreshToken(uid, refreshToken string) (*Token, error
 }
 
 // RevokeToken 撤销 Token
-func (m *SignTokenManager) RevokeToken(uid string, isRefresh bool) error {
+func (m *SignTokenStore) RevokeToken(uid string, isRefresh bool) error {
 	if isRefresh {
 		return m.store.Delete(fmt.Sprintf("%s:%s", TokenPrefixRefresh, uid))
 	}
@@ -89,7 +89,7 @@ func (m *SignTokenManager) RevokeToken(uid string, isRefresh bool) error {
 }
 
 // sign 生成签名token: MD5(uid + timestamp + issuer + secret)
-func (m *SignTokenManager) sign(uid string) string {
+func (m *SignTokenStore) sign(uid string) string {
 	timestamp := time.Now().UnixMilli()
 	return fmt.Sprintf("%x", md5.Sum([]byte(fmt.Sprintf("%s:%d:%s:%s", uid, timestamp, m.issuer, m.secretKey))))
 }

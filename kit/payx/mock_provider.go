@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/ve-weiyi/pkg/kit/randomx"
+	"github.com/ve-weiyi/pkg/utils/randomx"
 )
 
 // MockProvider Mock支付服务提供商（用于开发测试）

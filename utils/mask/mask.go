@@ -1,4 +1,4 @@
-package mark
+package mask
 
 import (
 	"regexp"

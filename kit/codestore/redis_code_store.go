@@ -8,7 +8,7 @@ import (
 
 	"github.com/redis/go-redis/v9"
 
-	"github.com/ve-weiyi/pkg/kit/randomx"
+	"github.com/ve-weiyi/pkg/utils/randomx"
 )
 
 // RedisCodeStore 基于Redis的CodeStore实现
