@@ -1,4 +1,4 @@
-package tokenx
+package tokenstore
 
 import (
 	"context"

@@ -86,9 +86,9 @@ func (p *QiniuKodoProvider) Upload(ctx context.Context, file io.Reader, filename
 	// 创建表单上传对象
 	formUploader := storage.NewFormUploader(cfg)
 	ret := storage.PutRet{}
-
+	putExtra := storage.PutExtra{}
 	// 上传文件
-	err := formUploader.Put(ctx, &ret, uploadToken, fileKey, file, -1, nil)
+	err := formUploader.Put(ctx, &ret, uploadToken, fileKey, file, -1, &putExtra)
 	if err != nil {
 		return "", fmt.Errorf("failed to upload file: %w", err)
 	}

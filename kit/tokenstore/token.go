@@ -1,4 +1,4 @@
-package tokenx
+package tokenstore
 
 import (
 	"fmt"
@@ -29,9 +29,9 @@ type Token struct {
 	RefreshExpiresAt int64  `json:"refresh_expires_at"` // RefreshToken 过期时间戳（秒）
 }
 
-// TokenManager 定义 Token 全生命周期管理的核心接口，适配多实现（JWT/Sign）
-// 所有 Token 实现（如 JWTokenManager、SignTokenManager）都需遵循此接口规范
-type TokenManager interface {
+// TokenStore 定义 Token 全生命周期管理的核心接口，适配多实现（JWT/Sign）
+// 所有 Token 实现（如 JWTokenStore、SignTokenStore）都需遵循此接口规范
+type TokenStore interface {
 	// GenerateToken 基于用户唯一标识 uid 生成 Token 结构体
 	// 入参：
 	//   uid - 用户唯一标识（string 类型，可根据业务改为 int/int64）
@@ -69,10 +69,10 @@ type TokenManager interface {
 	RevokeToken(uid string, isRefresh bool) error
 }
 
-// TokenStore 定义 Token 存储层的通用接口，适配不同存储实现（Redis/本地缓存/数据库等）
-// 核心职责：为 TokenManager 提供 Token 增删查、过期控制等存储能力，与具体存储介质解耦
+// TokenCache 定义 Token 存储层的通用接口，适配不同存储实现（Redis/本地缓存/数据库等）
+// 核心职责：为 TokenStore 提供 Token 增删查、过期控制等存储能力，与具体存储介质解耦
 // 存储结构：key=uid, value=token信息（JSON格式包含access_token和refresh_token）
-type TokenStore interface {
+type TokenCache interface {
 	// Set 存储用户的 Token 信息，并设置过期时间
 	// 入参：
 	//   key - 用户唯一标识 uid
