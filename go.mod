@@ -24,6 +24,7 @@ require (
 	github.com/segmentio/kafka-go v0.4.50
 	github.com/shirou/gopsutil/v3 v3.24.5
 	github.com/stretchr/testify v1.11.1
+	github.com/stripe/stripe-go/v82 v82.5.1
 	github.com/swaggo/http-swagger v1.3.4
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.3.56
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms v1.3.56

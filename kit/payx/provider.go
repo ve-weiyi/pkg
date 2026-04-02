@@ -7,8 +7,8 @@ func NewPaymentProvider(config *PaymentConfig) PaymentProvider {
 		return NewAlipayProvider(config)
 	case "wechat":
 		return NewWechatProvider(config)
-	case "mock":
-		return NewMockProvider(config)
+	case "stripe":
+		return NewStripeProvider(config)
 	default:
 		// 默认使用 Mock 提供商（开发环境）
 		return NewMockProvider(config)

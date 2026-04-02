@@ -13,9 +13,12 @@ type PaymentConfig struct {
 	// 微信配置
 	MchId    string // 商户号
 	SerialNo string // 证书序列号
-	ApiKey   string // API密钥（V2版本）
+	ApiKey   string // API密钥（V2版本 / 云购OS mchKey）
 	ApiV3Key string // API V3密钥
 	CertPath string // 证书路径（可选）
+
+	// Stripe 配置
+	WebhookSecret string // Stripe Webhook 签名密钥
 
 	// 通用配置
 	NotifyURL string // 默认异步回调地址
