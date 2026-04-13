@@ -2,7 +2,10 @@ package storagex
 
 import (
 	"context"
+	"fmt"
 	"io"
+	"path/filepath"
+	"strings"
 	"time"
 )
 
@@ -91,4 +94,35 @@ func NewStorageProvider(config *StorageConfig) StorageProvider {
 		// 默认使用本地存储（开发环境）
 		return NewLocalStorageProvider(config)
 	}
+}
+
+// buildURLWithDomain 构建带域名的URL，若域名已含协议则直接使用，否则默认补 https://
+func buildURLWithDomain(domain, fileKey string) string {
+	domain = strings.TrimRight(domain, "/")
+	if !strings.HasPrefix(domain, "http://") && !strings.HasPrefix(domain, "https://") {
+		domain = "https://" + domain
+	}
+	return fmt.Sprintf("%s/%s", domain, fileKey)
+}
+
+// GenerateFileKey 生成唯一的文件Key
+func GenerateFileKey(basePath, filename string) string {
+	// 获取文件目录
+	dir := filepath.Dir(filename)
+	// 获取文件名称
+	base := filepath.Base(filename)
+
+	// 生成日期路径：YYYYMMDD
+	now := time.Now()
+	datePath := now.Format("20060102")
+
+	// 生成唯一文件名：毫秒时间戳 + 文件名称
+	uniqueName := fmt.Sprintf("%d-%s", now.UnixMilli(), base)
+
+	// 组合完整路径（包含BasePath）
+	if basePath != "" {
+		return filepath.Join(basePath, datePath, uniqueName)
+	}
+
+	return filepath.Join(dir, datePath, uniqueName)
 }

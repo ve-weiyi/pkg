@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
-	"github.com/google/uuid"
 )
 
 // AliyunOSSProvider 阿里云OSS存储服务提供商
@@ -145,31 +144,14 @@ func (p *AliyunOSSProvider) GetProviderName() string {
 
 // generateFileKey 生成唯一的文件Key
 func (p *AliyunOSSProvider) generateFileKey(filename string) string {
-	// 获取文件目录
-	dir := filepath.Dir(filename)
-	// 获取文件扩展名
-	ext := filepath.Base(filename)
-
-	// 生成日期路径：YYYY/MM/DD
-	now := time.Now()
-	datePath := now.Format("20060102")
-
-	// 生成唯一文件名：UUID + 扩展名
-	uniqueName := uuid.New().String() + ext
-
-	// 组合完整路径（包含BasePath）
-	if p.config.BasePath != "" {
-		return filepath.Join(p.config.BasePath, datePath, uniqueName)
-	}
-
-	return filepath.Join(dir, datePath, uniqueName)
+	return GenerateFileKey(p.config.BasePath, filename)
 }
 
 // buildAccessURL 构建访问URL
 func (p *AliyunOSSProvider) buildAccessURL(fileKey string) string {
 	// 如果配置了CDN域名，使用CDN域名
 	if p.config.CDNDomain != "" {
-		return fmt.Sprintf("https://%s/%s", strings.TrimRight(p.config.CDNDomain, "/"), fileKey)
+		return buildURLWithDomain(p.config.CDNDomain, fileKey)
 	}
 
 	// 使用OSS默认域名
